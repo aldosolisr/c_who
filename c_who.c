@@ -15,7 +15,9 @@ int main(){
         exit(EXIT_FAILURE);
     }
     while(read(utmpfd, &current_record, reclen) == reclen){
-        show_info(&current_record);
+        if(current_record.ut_type == USER_PROCESS){
+            show_info(&current_record);
+        }
     }
     close(utmpfd);
     return 0;
