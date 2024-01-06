@@ -2,9 +2,12 @@
 #include <stdlib.h>
 #include <utmp.h>
 #include <unistd.h>
+#include <time.h>
 #include <fcntl.h>
 
 void show_info(struct utmp *record);
+void show_time(int time);
+void format_time(const char* date, char formatted[10]);
 
 int main(){
     struct utmp current_record;
@@ -24,12 +27,20 @@ int main(){
 }
 
 void show_info(struct utmp *record){
-    printf("%-15.15s", record->ut_name);
+    printf("%-12.12s", record->ut_user);
     printf(" ");
     printf("%-8.8s", record->ut_line);
     printf(" ");
-    printf("%10d", record->ut_time);
-    printf(" ");
-    printf("(%s)", record->ut_host);
+    show_time(record->ut_time);
+    if(record->ut_host[0] != '\0')
+        printf("(%s)", record->ut_host);
     printf("\n");
+}
+
+void show_time(int time){
+    char *cp;
+    long int conv = time;
+    cp = ctime(&conv);
+    printf("%20.20s", cp+4);
+    printf(" ");
 }
